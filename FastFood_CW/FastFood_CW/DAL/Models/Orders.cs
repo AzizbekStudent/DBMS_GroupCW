@@ -3,7 +3,7 @@
     // Students ID: 00013836, 00014725, 00014896
     public class Orders
     {
-        public int? order_ID { get; set; }
+        public int? Order_ID { get; set; }
 
         public required DateTime OrderTime { get; set; }
 

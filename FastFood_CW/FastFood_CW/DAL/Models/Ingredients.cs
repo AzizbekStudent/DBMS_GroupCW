@@ -3,7 +3,7 @@
     // Students ID: 00013836, 00014725, 00014896
     public class Ingredients
     {
-        public int? ingredient_ID { get; set; }
+        public int? Ingredient_ID { get; set; }
 
         public required string Title { get; set; }
 

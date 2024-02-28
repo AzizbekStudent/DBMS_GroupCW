@@ -5,12 +5,12 @@
     {
         // Junction Table
         // Foreign key
-        public int? meal_ID { get; set; }
+        public int? Meal_ID { get; set; }
         // getting object according to foreign key
         public Menu? Meal { get; set; }
 
         // Foreign key
-        public int? ingredient_ID { get; set; }
+        public int? Ingredient_ID { get; set; }
         // getting object according to foreign key
         public Ingredients? Ingredient { get; set; }
     }

@@ -3,7 +3,7 @@
     // Students ID: 00013836, 00014725, 00014896
     public class Employee
     {
-        public int? employee_ID { get; set; }
+        public int? Employee_ID { get; set; }
 
         public required string FName { get; set; }
 

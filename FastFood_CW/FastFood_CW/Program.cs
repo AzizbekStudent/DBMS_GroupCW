@@ -1,10 +1,19 @@
 
 // builder initialization
+using FastFood_CW.DAL.Interface;
+using FastFood_CW.DAL.Models;
+using FastFood_CW.DAL.Repository;
+
 var builder = WebApplication.CreateBuilder(args);
 string? _connStr = builder.Configuration.GetConnectionString("DBMS_FastFood_CW")
         .Replace("|DataDirectory|", builder.Environment.ContentRootPath);
 
-
+// Repository initialization
+builder.Services.AddScoped<IRepository<Employee>>(
+   p =>
+   {
+       return new EmployeeDapperRepository(_connStr);
+   });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

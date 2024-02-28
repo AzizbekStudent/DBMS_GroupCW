@@ -8,8 +8,12 @@
 
   <ItemGroup>
     <Folder Include="AppData\" />
-    <Folder Include="DAL\Interface\" />
-    <Folder Include="DAL\Repository\" />
+    <Folder Include="SQL_Statements\Procedures\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.28" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.16" />
   </ItemGroup>
 
 </Project>
