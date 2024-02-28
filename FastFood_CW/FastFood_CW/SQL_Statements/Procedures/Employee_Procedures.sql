@@ -13,12 +13,12 @@ End
 -- Get By Id
 Go
 Create or Alter Procedure pEmployee_GetById
-    @employeeID int
+    @Employee_ID int
 As
 Begin
     Select Employee_ID, FName, LName, Telephone, Job, Age, Salary, HireDate, Image, FullTime
     From Employee
-    Where Employee_ID = @employeeID
+    Where Employee_ID = @Employee_ID
 End
 
 -- Create

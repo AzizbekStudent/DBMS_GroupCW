@@ -10,7 +10,7 @@ string? _connStr = builder.Configuration.GetConnectionString("DBMS_FastFood_CW")
 
 // Repository initialization
 builder.Services.AddScoped<IRepository<Employee>>(
-   p =>
+   setting =>
    {
        return new EmployeeDapperRepository(_connStr);
    });
@@ -37,6 +37,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Employee}/{action=Index}/{id?}");
 
 app.Run();

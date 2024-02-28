@@ -50,7 +50,7 @@ namespace FastFood_CW.DAL.Repository
                 param: parameters
             );
 
-            if (parameters.Get<int>("RetVal") != 0)
+            if (parameters.Get<int>("RetVal") != 1)
             {
                 throw new Exception(parameters.Get<string>("Errors"));
             }
@@ -97,9 +97,14 @@ namespace FastFood_CW.DAL.Repository
         public async Task<Employee> GetByIdAsync(int id)
         {
             using var conn = new SqlConnection(_connStr);
+            var parameters = new DynamicParameters();
+            parameters.Add("@Employee_ID", id); 
+
             Employee? employee = await conn.QueryFirstOrDefaultAsync<Employee>(
-                "pEmployee_GetById", new { Id = id }, 
+                "pEmployee_GetById",
+                parameters,
                 commandType: CommandType.StoredProcedure);
+
             return employee;
         }
 
@@ -108,30 +113,28 @@ namespace FastFood_CW.DAL.Repository
         {
             using var conn = new SqlConnection(_connStr);
             var parameters = new DynamicParameters();
-            parameters.AddDynamicParams(new
-            {
-                entity.Employee_ID,
-                entity.FName,
-                entity.LName,
-                entity.Telephone,
-                entity.Job,
-                entity.Age,
-                entity.Salary,
-                entity.HireDate,
-                entity.Image,
-                entity.FullTime
-            });
-            parameters.Add(
-                "@Errors",
-                direction: ParameterDirection.Output,
-                dbType: DbType.String,
-                size: 1000);
+            parameters.Add("@EmployeeID", entity.Employee_ID);
+            parameters.Add("@FName", entity.FName);
+            parameters.Add("@LName", entity.LName);
+            parameters.Add("@Telephone", entity.Telephone);
+            parameters.Add("@Job", entity.Job);
+            parameters.Add("@Age", entity.Age);
+            parameters.Add("@Salary", entity.Salary);
+            parameters.Add("@HireDate", entity.HireDate);
 
-            await conn.ExecuteAsync(
-                "pEmployee_Update",
-                commandType: CommandType.StoredProcedure,
-                param: parameters
-            );
+            if (entity.Image != null)
+            { 
+                parameters.Add("@Image", entity.Image);
+            }
+            else
+            {
+                parameters.Add("@Image", DBNull.Value); 
+            }
+
+            parameters.Add("@FullTime", entity.FullTime);
+            parameters.Add("@Errors", direction: ParameterDirection.Output, dbType: DbType.String, size: 1000);
+
+            await conn.ExecuteAsync("pEmployee_Update", parameters, commandType: CommandType.StoredProcedure);
 
             string? errors = parameters.Get<string>("Errors");
             if (!string.IsNullOrWhiteSpace(errors))
