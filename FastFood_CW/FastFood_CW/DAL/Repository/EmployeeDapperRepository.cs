@@ -123,12 +123,19 @@ namespace FastFood_CW.DAL.Repository
             parameters.Add("@HireDate", entity.HireDate);
 
             if (entity.Image != null)
-            { 
-                parameters.Add("@Image", entity.Image);
+            {
+                if (entity.Image == null)
+                {
+                    parameters.Add("@Image", DBNull.Value); 
+                }
+                else
+                {
+                    parameters.Add("@Image", entity.Image); 
+                }
             }
             else
             {
-                parameters.Add("@Image", DBNull.Value); 
+                parameters.Add("@Image", DBNull.Value);
             }
 
             parameters.Add("@FullTime", entity.FullTime);

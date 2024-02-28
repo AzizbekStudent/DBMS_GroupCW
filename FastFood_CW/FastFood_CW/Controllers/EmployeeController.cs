@@ -43,13 +43,38 @@ namespace FastFood_CW.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee emp)
+        public async Task<IActionResult> Create(Employee emp,IFormFile image)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    int id = await _repository.CreateAsync(emp);
+                    byte[] imageData = null;
+                    if (image != null)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await image.CopyToAsync(memoryStream);
+                            imageData = memoryStream.ToArray();
+                            emp.Image = imageData;
+                        }
+                    }
+
+                    var employee = new Employee
+                    {
+                        FName = emp.FName,
+                        LName = emp.LName,
+                        Telephone = emp.Telephone,
+                        Job = emp.Job,
+                        Age = emp.Age,
+                        Salary = emp.Salary,
+                        HireDate = emp.HireDate,
+                        Image = emp.Image, 
+                        FullTime = emp.FullTime 
+                    };
+
+                    int id = await _repository.CreateAsync(employee);
+
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -57,6 +82,7 @@ namespace FastFood_CW.Controllers
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
+
             return View(emp);
         }
 
@@ -73,20 +99,47 @@ namespace FastFood_CW.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Employee emp)
+        public async Task<IActionResult> Edit(int id, Employee emp, IFormFile image)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _repository.UpdateAsync(emp);
-                    return RedirectToAction("Details", new { id = emp.Employee_ID });
+                    var employee = await _repository.GetByIdAsync(id);
+
+                    if (employee == null)
+                    {
+                        return NotFound();
+                    }
+
+                    employee.FName = emp.FName;
+                    employee.LName = emp.LName;
+                    employee.Telephone = emp.Telephone;
+                    employee.Job = emp.Job;
+                    employee.Age = emp.Age;
+                    employee.Salary = emp.Salary;
+                    employee.HireDate = emp.HireDate;
+                    employee.FullTime = emp.FullTime;
+
+                    if (image != null && image.Length > 0)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await image.CopyToAsync(memoryStream);
+                            employee.Image = memoryStream.ToArray();
+                        }
+                    }
+
+                    await _repository.UpdateAsync(employee);
+
+                    return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
+
             return View(emp);
         }
 
