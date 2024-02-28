@@ -260,3 +260,11 @@ UpgradeLog*.XML
 UpgradeLog*.htm
 ServiceFabricBackup/
 *.r
+
+
+# Ignore everything in the AppData folder
+AppData/*
+
+# But include the db.mdf and db.ldf files
+!AppData/DBMS_FastFood_CW.mdf
+!AppData/DBMS_FastFood_CW.ldf
