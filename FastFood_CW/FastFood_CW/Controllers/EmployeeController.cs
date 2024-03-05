@@ -143,7 +143,7 @@ namespace FastFood_CW.Controllers
             return View(emp);
         }
 
-        [HttpPost]
+        [HttpDelete]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
